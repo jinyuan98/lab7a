@@ -1,17 +1,23 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'composer:latest'
+        }
+    }
     stages {
-        stage('Checkout') {
+        stage('Debug') {
             steps {
-                checkout scm
+                sh 'env'
+                sh 'which docker'
+                sh 'docker --version'
             }
         }
-        stage('Install Dependencies') {
+        stage('Build') {
             steps {
                 sh 'composer install'
             }
         }
-        stage('Run Tests') {
+        stage('Test') {
             steps {
                 sh './vendor/bin/phpunit tests'
             }
